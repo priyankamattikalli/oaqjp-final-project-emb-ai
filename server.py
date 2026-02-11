@@ -1,16 +1,17 @@
+"""Emotion detection module."""
+
 from flask import Flask, render_template, request
 from EmotionDetection.emotion_detection import emotion_detector
 app = Flask("Emotion Detector")
 
 @app.route("/emotionDetector")
 def emotion_analyzer():
+    """Emotion detection module."""
     # Retrieve the text to analyze from the request arguments
     text_to_analyze = request.args.get('textToAnalyze')
 
     # Pass the text to the sentiment_analyzer function and store the response
     response = emotion_detector(text_to_analyze)
-
-    
     anger = response['anger']
     disgust = response['disgust']
     fear = response['fear']
@@ -20,13 +21,17 @@ def emotion_analyzer():
 
     if dominant_emotion is None:
         return "Invalid text! Please try again!."
-    else:
-    # Return a formatted string with the sentiment label and score
-    #return "The given text has been identified as {} with a score of {}.".format(label.split('_')[1], score)
-        return "For the given statement, the system response is 'anger': {}, 'disgust': {}, 'fear': {}, 'joy': {} and 'sadness': {}. The dominant emotion is {}.".format(anger, disgust, fear, joy, sadness, dominant_emotion)
+
+    return (
+    f"For the given statement, the system response is 'anger': {anger}, "
+    f"'disgust': {disgust}, 'fear': {fear}, 'joy': {joy} and "
+    f"'sadness': {sadness}. The dominant emotion is {dominant_emotion}."
+)
+
 
 @app.route("/")
 def render_index_page():
+    """Emotion detection module."""
     return render_template('index.html')
 
 if __name__ == "__main__":
